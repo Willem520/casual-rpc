@@ -27,6 +27,7 @@ import willem.weiyu.casual.protocol.JsonSerializer;
 public class CasualClient implements IClient{
     private EventLoopGroup eventLoopGroup;
     private Channel channel;
+    private CasualClientInitializer initializer;
     private CasualClientHandler handler;
     private String host;
     private int port;
@@ -49,23 +50,16 @@ public class CasualClient implements IClient{
     @Override
     public void connect(InetSocketAddress address) {
         handler = new CasualClientHandler();
+        initializer = new CasualClientInitializer(handler);
         eventLoopGroup = new NioEventLoopGroup();
+
         Bootstrap bootstrap = new Bootstrap();
 
         bootstrap.group(eventLoopGroup)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .option(ChannelOption.TCP_NODELAY, true)
-                .handler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        ChannelPipeline pipeline = socketChannel.pipeline();
-                        pipeline.addLast(new LengthFieldBasedFrameDecoder(65535,0,4))
-                                .addLast(new CasualEncoder(CasualRequest.class, new JsonSerializer()))
-                                .addLast(new CasualDecoder(CasualResponse.class, new JsonSerializer()))
-                                .addLast(handler);
-                    }
-                });
+                .handler(initializer);
         try {
             channel = bootstrap.connect(address).sync().channel();
         } catch (InterruptedException e) {
