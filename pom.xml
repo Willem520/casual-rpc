@@ -12,7 +12,10 @@
     <modules>
         <module>casual-client</module>
         <module>casual-server</module>
-        <module>casual-common</module>
+        <module>casual-core</module>
+        <module>test-casual-server</module>
+        <module>test-casual-client</module>
+        <module>test-casual-core</module>
     </modules>
 
     <properties>
@@ -20,6 +23,10 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <lombok.version>1.18.6</lombok.version>
+        <fastjson.version>1.2.57</fastjson.version>
+        <netty.version>4.1.35.Final</netty.version>
+        <springboot.version>2.1.4.RELEASE</springboot.version>
+        <reflections.version>0.9.11</reflections.version>
     </properties>
 
     <dependencies>
@@ -29,6 +36,13 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
         </dependency>
     </dependencies>
 </project>
