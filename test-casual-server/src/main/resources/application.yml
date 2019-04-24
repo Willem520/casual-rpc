@@ -1,0 +1,5 @@
+casual:
+  server:
+    port: 8080
+    bossCount: 4
+    workerCount: 16

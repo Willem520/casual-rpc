@@ -25,10 +25,10 @@ import willem.weiyu.casual.server.ChannelRepository;
  * @Date 2019/4/24 10:41
  */
 @Configuration
-@EnableConfigurationProperties(CasualProperties.class)
-public class CasualConfig {
+@EnableConfigurationProperties(CasualServerProp.class)
+public class CasualServerConfig {
     @Autowired
-    private CasualProperties casualProperties;
+    private CasualServerProp casualProperties;
 
     @Autowired
     private CasualServerInitializer initializer;

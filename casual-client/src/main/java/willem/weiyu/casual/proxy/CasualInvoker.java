@@ -4,7 +4,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-import willem.weiyu.casual.Transporter;
+import willem.weiyu.casual.client.CasualClient;
+import willem.weiyu.casual.client.IClient;
 import willem.weiyu.casual.common.CasualRequest;
 
 /**
@@ -33,6 +34,8 @@ public class CasualInvoker<T> implements InvocationHandler {
         request.setParameterType(parameterTypes);
         request.setParameters(args);
 
-        return Transporter.send(request).getResult();
+        IClient client = new CasualClient("127.0.0.1", 8080);
+        client.connect(client.getInetSocketAddress());
+        return client.send(request).getResult();
     }
 }

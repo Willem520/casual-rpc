@@ -4,20 +4,13 @@ import java.net.InetSocketAddress;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import willem.weiyu.casual.client.handler.CasualClientHandler;
 import willem.weiyu.casual.common.CasualRequest;
 import willem.weiyu.casual.common.CasualResponse;
-import willem.weiyu.casual.protocol.CasualDecoder;
-import willem.weiyu.casual.protocol.CasualEncoder;
-import willem.weiyu.casual.protocol.JsonSerializer;
 
 /**
  * @Author weiyu

@@ -6,7 +6,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 
 /**
- * @Author weiyu005@ke.com
+ * @Author weiyu
  * @Description
  * @Date 2019/4/24 15:47
  */
@@ -16,6 +16,6 @@ public class CasualClientApp {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(CasualClientApp.class, args);
         IHelloService helloService = context.getBean(IHelloService.class);
-        System.out.println(helloService.say("hello"));
+        helloService.say("hello");
     }
 }
