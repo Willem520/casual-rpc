@@ -16,7 +16,7 @@ import willem.weiyu.casual.zookeeper.ZookeeperCasualServiceRegistry;
 @Configuration
 @EnableConfigurationProperties(CasualClientProp.class)
 public class CasualClientConfig{
-    @Value("${zkAddress:localhost:2181}")
+    @Value("${registry.address:2181}")
     private String zkAddress;
 
     @Bean

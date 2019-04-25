@@ -26,7 +26,7 @@ import willem.weiyu.casual.zookeeper.ZookeeperCasualServiceRegistry;
 @Configuration
 @EnableConfigurationProperties(CasualServerProp.class)
 public class CasualServerConfig implements ApplicationContextAware {
-    @Value("${zkAddress:localhost:2181}")
+    @Value("${registry.address:localhost:2181}")
     private String zkAddress;
     @Autowired
     private CasualServerProp casualProperties;

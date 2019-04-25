@@ -1,4 +1,5 @@
-zkAddress: 10.26.27.81:2181
+registry:
+  address: 10.26.27.81:2181
 casual:
   server:
     port: 8080
