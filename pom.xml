@@ -16,6 +16,7 @@
         <module>test-casual-server</module>
         <module>test-casual-client</module>
         <module>test-casual-core</module>
+        <module>casual-registry</module>
     </modules>
 
     <properties>
@@ -27,6 +28,8 @@
         <netty.version>4.1.35.Final</netty.version>
         <springboot.version>2.1.4.RELEASE</springboot.version>
         <reflections.version>0.9.11</reflections.version>
+        <!--<zookeeper.version>3.4.12</zookeeper.version>-->
+        <curator.version>2.13.0</curator.version>
     </properties>
 
     <dependencies>

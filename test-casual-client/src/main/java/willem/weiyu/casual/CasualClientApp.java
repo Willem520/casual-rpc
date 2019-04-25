@@ -2,8 +2,6 @@ package willem.weiyu.casual;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
-
 
 /**
  * @Author weiyu
@@ -14,8 +12,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class CasualClientApp {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(CasualClientApp.class, args);
-        IHelloService helloService = context.getBean(IHelloService.class);
-        helloService.say("hello");
+        SpringApplication.run(CasualClientApp.class, args);
     }
 }

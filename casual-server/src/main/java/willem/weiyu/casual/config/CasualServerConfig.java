@@ -1,78 +1,60 @@
 package willem.weiyu.casual.config;
 
-import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
-import willem.weiyu.casual.server.CasualServerInitializer;
-import willem.weiyu.casual.server.ChannelRepository;
+import lombok.Data;
+import willem.weiyu.casual.CasualServiceRegistry;
+import willem.weiyu.casual.annotation.CasualService;
+import willem.weiyu.casual.zookeeper.ZookeeperCasualServiceRegistry;
 
 /**
  * @Author weiyu
  * @Description
  * @Date 2019/4/24 10:41
  */
+@Data
 @Configuration
 @EnableConfigurationProperties(CasualServerProp.class)
-public class CasualServerConfig {
+public class CasualServerConfig implements ApplicationContextAware {
+    @Value("${zkAddress:localhost:2181}")
+    private String zkAddress;
     @Autowired
     private CasualServerProp casualProperties;
 
-    @Autowired
-    private CasualServerInitializer initializer;
+    /**
+     * 存放 服务名 与 服务对象 之间的映射关系
+     */
+    private Map<String, Object> handlerMap = new HashMap<>();
 
-    @Bean(name = "serverBootstrap")
-    public ServerBootstrap bootstrap(){
-        ServerBootstrap serverBootstrap = new ServerBootstrap();
-        serverBootstrap.group(bossGroup(), workerGroup())
-                .channel(NioServerSocketChannel.class)
-                .handler(new LoggingHandler(LogLevel.INFO))
-                .childHandler(initializer);
-
-        Map<ChannelOption<?>, Object> channelOptionMap = channelOptions();
-        Set<ChannelOption<?>> keySet = channelOptionMap.keySet();
-        for (ChannelOption option : keySet){
-            serverBootstrap.option(option, channelOptionMap.get(option));
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        Map<String,Object> serviceBeanMap = applicationContext.getBeansWithAnnotation(CasualService.class);
+        if (serviceBeanMap != null && !serviceBeanMap.isEmpty()){
+            for (Object serviceBean :
+                    serviceBeanMap.values()) {
+                CasualService casualService = serviceBean.getClass().getAnnotation(CasualService.class);
+                String serviceName = casualService.value().getName();
+                String serviceVersion = casualService.version();
+                if (serviceVersion != null && serviceVersion.replace(" ","").length() > 0) {
+                    serviceName += "-" + serviceVersion;
+                }
+                handlerMap.put(serviceName, serviceBean);
+            }
         }
-        return serverBootstrap;
-    }
-
-    @Bean(destroyMethod = "shutdownGracefully")
-    public NioEventLoopGroup bossGroup(){
-        return new NioEventLoopGroup();
-    }
-
-    @Bean(destroyMethod = "shutdownGracefully")
-    public NioEventLoopGroup workerGroup(){
-        return new NioEventLoopGroup();
     }
 
     @Bean
-    public Map<ChannelOption<?>, Object> channelOptions(){
-        Map<ChannelOption<?>, Object> options = new HashMap();
-        options.put(ChannelOption.SO_BACKLOG, casualProperties.getBacklog());
-        return options;
-    }
-
-    @Bean
-    public InetSocketAddress socketAddress(){
-        return new InetSocketAddress(casualProperties.getPort());
-    }
-
-    @Bean
-    public ChannelRepository channelRepository(){
-        return new ChannelRepository();
+    public CasualServiceRegistry registry(){
+        return new ZookeeperCasualServiceRegistry(zkAddress);
     }
 }

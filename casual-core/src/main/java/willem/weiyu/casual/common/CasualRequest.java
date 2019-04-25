@@ -16,7 +16,7 @@ public class CasualRequest {
     /**
      * 类名
      */
-    private String className;
+    private String interfaceName;
     /**
      * 方法名
      */
@@ -29,4 +29,8 @@ public class CasualRequest {
      * 请求参数
      */
     private Object[] parameters;
+    /**
+     * 版本
+     */
+    private String version;
 }

@@ -31,3 +31,8 @@ hs_err_pid*
 /test-casual-server/test-casual-server.iml
 /test-casual-server/target/
 /test-casual-core/test-casual-core.iml
+/casual-registry/casual-registry.iml
+/casual-registry/target/
+/casual-client/target/
+/test-casual-client/target/
+/test-casual-core/target/
