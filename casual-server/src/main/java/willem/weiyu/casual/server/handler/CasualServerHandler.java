@@ -1,13 +1,10 @@
 package willem.weiyu.casual.server.handler;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.reflect.FastClass;
 import org.springframework.cglib.reflect.FastMethod;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -18,6 +15,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import willem.weiyu.casual.common.CasualRequest;
 import willem.weiyu.casual.common.CasualResponse;
+import willem.weiyu.casual.config.CasualServerConfig;
 
 /**
  * @Author weiyu
@@ -28,11 +26,8 @@ import willem.weiyu.casual.common.CasualResponse;
 @ChannelHandler.Sharable
 @Slf4j
 public class CasualServerHandler extends SimpleChannelInboundHandler<CasualRequest>{
-    private Map<String, Object> handlerMap;
-
-    public CasualServerHandler(Map<String, Object> handlerMap){
-        this.handlerMap = handlerMap;
-    }
+    @Autowired
+    private CasualServerConfig config;
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, CasualRequest casualRequest)
@@ -56,7 +51,7 @@ public class CasualServerHandler extends SimpleChannelInboundHandler<CasualReque
         if (!StringUtils.isEmpty(version)){
 
         }
-        Object serviceBean = handlerMap.get(serviceName);
+        Object serviceBean = config.getHandlerMap().get(serviceName);
         if (serviceBean == null){
             throw new RuntimeException(String.format("can not find service bean by key: %s", serviceName));
         }

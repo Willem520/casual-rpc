@@ -68,11 +68,6 @@ public class CasualServer {
         return new NioEventLoopGroup();
     }
 
-    /*@Bean
-    public ChannelRepository channelRepository(){
-        return new ChannelRepository();
-    }*/
-
     @PreDestroy
     public void stop() {
         if (serverChannel != null) {
